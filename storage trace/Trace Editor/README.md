@@ -1,5 +1,7 @@
 # Trace Editor
 
+Please keep in mind that **every trace must be preprocessed first** before getting into script's another functionalities.
+
 To run, access the `trace-editor.py` in the root directory.
 
 Before running, create 2 symlinks/folders inside this directory:
@@ -8,17 +10,16 @@ Before running, create 2 symlinks/folders inside this directory:
 
 The scripts will take every input and produce every output to those directories.
 
-Please keep in mind that **every trace must be preprocessed first** before getting into script's another functionalities.
 
 The target format of the trace is the same as `DiskSim` and `MQSim`，which is defined in `The DiskSim Simulation Environment Version 4.0 Reference Manual`.
 
 The format is as follows:
 
-1. Request arrival time: Float [nonnegative milliseconds] specifying the time the request “arrives” relative to the start of the simulation (at time 0.0).
-2.	Device number: [ Not used ]Integer specifying the device number (i.e., the storage component that the request accesses). 
-3.	Block number: Integer [nonnegative] specifying the ﬁrst device address of the request. The value is speciﬁed in the access unit of the logical device (**sector number** for now).
-4.	Request size: Integer [positive] specifying the size of the request in device blocks(**the number of sectors** that the request involved).
-5.	Request ﬂags: [0 for write, 1 for read]
+1. **Request arrival time**: Float [nonnegative milliseconds] specifying the time the request “arrives” relative to the start of the simulation (at time 0.0).
+2.	**Device number**: [ Not used ]Integer specifying the device number (i.e., the storage component that the request accesses). 
+3.	**Block number**: Integer [nonnegative] specifying the ﬁrst device address of the request. The value is speciﬁed in the access unit of the logical device (**sector number** for now).
+4.	**Request size**: Integer [positive] specifying the size of the request in device blocks(**the number of sectors** that the request involved).
+5.	**Request ﬂags**: [0 for write, 1 for read]
 
 ## List of commands:
 
