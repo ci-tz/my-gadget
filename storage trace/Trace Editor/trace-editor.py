@@ -12,6 +12,13 @@
 # ==============================================================================
 
 # import default
+import sys
+import argparse
+from os import listdir
+from subprocess import call
+
+sys.path.append('./myPackage')
+
 import trace_sanitizer
 import traces_merger
 import characteristic
@@ -23,12 +30,6 @@ import busy_load
 import traces_combiner
 import preprocess_trace
 import trace_modifier
-import sys
-import argparse
-from os import listdir
-from subprocess import call
-
-sys.path.append('./myPackage')
 
 
 # end of import part
