@@ -203,7 +203,7 @@ avg read(KB)                & {:.2f}     	 & span read                     & {} 
 		                     float(total_read_size) / readCount, convertToByteStr((read_max_offset - read_min_offset)*512))
 
   sizebucket = """
-\multicolumn{{4}}{{|c|}}{{\\textbf{{SIZE BUCKET(KB) {{[}}0-32,32-64,64-128,128-256,256-512,512-1024{{]}}}}}} \\\\ \\hline
+\multicolumn{{4}}{{|c|}}{{\\textbf{{SIZE BUCKET(KB) {{[}}0-32,32-64,64-128,128-256,256-512,512-1024,1024+{{]}}}}}} \\\\ \\hline
 write count                  & \multicolumn{{2}}{{l|}}{{{}}}                      & {}                   \\\\ \\hline
 read count                 & \multicolumn{{2}}{{l|}}{{{}}}                      & {}                   \\\\ \\hline
 write size                   & \multicolumn{{2}}{{l|}}{{{}}}                      & {}                   \\\\ \\hline
@@ -227,14 +227,17 @@ read size                  & \multicolumn{{2}}{{l|}}{{{}}}                      
 
   small_big = """
 \multicolumn{{4}}{{|c|}}{{\\textbf{{Small IO (\\textless= 32KB) v.s. Big IO(\\textgreater32KB)}}}}         \\\\ \\hline
-rand writes                 & {}             & small rand writes/s           & {:.2f}           \\\\ \\hline
+small rand writes                 & {}             & small rand writes/s           & {:.2f}           \\\\ \\hline
 big writes                  & {}             & big writes/s                  & {:.2f}           \\\\ \\hline
+small writes                  & {}             & small writes/s                  & {:.2f}           \\\\ \\hline
 \multicolumn{{2}}{{|l|}}{{score(\#big/\#small)}}      & \multicolumn{{2}}{{l|}}{{{:.2f}}}                       \\\\ \\hline
 """
 
   outstr += small_big.format(small_random_writes, float(small_random_writes) / totalsec,
 		             sum(write_countbucket[1:len(write_countbucket)]),
 		             float(sum(write_countbucket[1:len(write_countbucket)])) / totalsec,
+                 write_countbucket[0],
+                  float(write_countbucket[0]) / totalsec,
 		             float(sum(write_countbucket[1:len(write_countbucket)])) / write_countbucket[0] if write_countbucket[0] > 0 else 9999)
 
   plot = """
