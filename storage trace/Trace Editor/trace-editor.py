@@ -17,7 +17,7 @@ import argparse
 from os import listdir
 from subprocess import call
 
-sys.path.append('trace-edit/myPackage')
+sys.path.append('./myPackage')
 
 
 import trace_modifier
