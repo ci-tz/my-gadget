@@ -253,12 +253,12 @@ same write                  & \multicolumn{{3}}{{l|}}{{{}}}                     
   timeInterval.sort()
   overwritten_blk_count = numpy.array(list(written_block.values()))
   
-  outstr += plot.format(str(writeSize[0]) + ", "+ str(writeSize[(writeCount-1)/4]) + ", " +str(writeSize[(writeCount-1)/2]) + ", "+str(writeSize[3*(writeCount-1)/4])+", "+str(writeSize[writeCount-1]),
-			str(readSize[0]) + ", "+ str(readSize[(readCount-1)/4]) + ", " +str(readSize[(readCount-1)/2]) + ", "+str(readSize[3*(readCount-1)/4])+", "+str(readSize[readCount-1]),		        
-                        "{:.02f}".format(timeInterval[0]) + ", "+ "{0:.2f}".format(timeInterval[(len(timeInterval)-1)/4]) + ", " +"{0:.2f}".format(timeInterval[(len(timeInterval)-1)/2]) + ", "+"{0:.2f}".format(timeInterval[3*(len(timeInterval)-1)/4])+", "+"{0:.2f}".format(timeInterval[len(timeInterval)-1]),
-		        str(numpy.percentile(overwritten_blk_count,0)) + ", "
-		        + str(numpy.percentile(overwritten_blk_count,25)) + ", "
-		        + str(numpy.percentile(overwritten_blk_count,50)) + ", "
-		        + str(numpy.percentile(overwritten_blk_count,75)) + ", "
-		        + str(numpy.percentile(overwritten_blk_count,99)))
+  outstr += plot.format(str(writeSize[0]) + ", "+ str(writeSize[int((writeCount-1)/4)]) + ", " +str(writeSize[int((writeCount-1)/2)]) + ", "+str(writeSize[int(3*(writeCount-1)/4)])+", "+str(writeSize[writeCount-1]),
+            str(readSize[0]) + ", "+ str(readSize[int((readCount-1)/4)]) + ", " +str(readSize[int((readCount-1)/2)]) + ", "+str(readSize[int(3*(readCount-1)/4)])+", "+str(readSize[readCount-1]),		        
+                        "{:.02f}".format(timeInterval[0]) + ", "+ "{0:.2f}".format(timeInterval[int((len(timeInterval)-1)/4)]) + ", " +"{0:.2f}".format(timeInterval[int((len(timeInterval)-1)/2)]) + ", "+"{0:.2f}".format(timeInterval[int(3*(len(timeInterval)-1)/4)])+", "+"{0:.2f}".format(timeInterval[len(timeInterval)-1]),
+                str(numpy.percentile(overwritten_blk_count,0)) + ", "
+                + str(numpy.percentile(overwritten_blk_count,25)) + ", "
+                + str(numpy.percentile(overwritten_blk_count,50)) + ", "
+                + str(numpy.percentile(overwritten_blk_count,75)) + ", "
+                + str(numpy.percentile(overwritten_blk_count,99)))
   out.write(outstr)
