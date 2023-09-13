@@ -30,5 +30,5 @@ def checkIOImbalance(inputdisk, granularity):
       bucket[int(float(request[0]) * 1000) / (delta * 1000)][i] += 1
 
   for key in sorted(bucket):
-    print str(int(key * granularity)) + "-" + str(int(key * granularity + granularity)) + ": " + str(bucket[key])  + " - imbalance:" + str(float(max(bucket[key]) / median(bucket[key])))
+    print(str(int(key * granularity)) + "-" + str(int(key * granularity + granularity)) + ": " + str(bucket[key])  + " - imbalance:" + str(float(max(bucket[key]) / median(bucket[key]))))
 

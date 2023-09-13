@@ -217,7 +217,7 @@ def getTraceInfo(tracefile):
   writeSize.sort()
   readSize.sort()
   timeInterval.sort()
-  overwritten_blk_count = numpy.array(written_block.values())
+  overwritten_blk_count = numpy.array(list(written_block.values()))
 
   out.write("---Whisker plot information: min, 25%, med, 75%, max---\n")
   out.write("Read size (Byte) : "+ str(readSize[0]) + ", "+ str(readSize[(readCount-1)/4]) + ", " +str(readSize[(readCount-1)/2]) + ", "+str(readSize[3*(readCount-1)/4])+", "+str(readSize[readCount-1]) + "\n")

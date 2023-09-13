@@ -64,8 +64,8 @@ def checkCongestedTime(tracefile, process_type, devno, minutes, top = 1):
     unit = "requests"
   else:
     unit = "KB"
-  for elm in sorted(result.items(), key=operator.itemgetter(1), reverse=True):
-    print "time(minutes): " + str(elm[0] * minutes) + "-" + str(elm[0] * minutes + minutes) + ": " + str(elm[1]).rstrip('0').rstrip('.') + " " + unit
+  for elm in sorted(list(result.items()), key=operator.itemgetter(1), reverse=True):
+    print("time(minutes): " + str(elm[0] * minutes) + "-" + str(elm[0] * minutes + minutes) + ": " + str(elm[1]).rstrip('0').rstrip('.') + " " + unit)
     i += 1
     if i >= top:
       break

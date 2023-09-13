@@ -5,7 +5,7 @@ from bitarray import bitarray
 largestblkno = 0
 
 def sanitize(tracefile,maxsize):
-  print "sanitizing: " + str(tracefile)
+  print("sanitizing: " + str(tracefile))
   out = open("out/" + tracefile.split('/')[-1] + "-sanitize.trace", 'w')
 
   with open ("in/" + tracefile, "r") as myfile:
@@ -22,7 +22,7 @@ def fuseContiguousIO(tracein):
   lr = ["-1"] * 5 #last request
   
   for line in tracein.splitlines():
-    tok = map(str.lstrip, line.split(" ")) #time,devno,blkno,blkcount,flag-0 write/1 read
+    tok = list(map(str.lstrip, line.split(" "))) #time,devno,blkno,blkcount,flag-0 write/1 read
     
     #for largest blkno
     largestblkno = max(largestblkno,int(tok[2]) + int(tok[3]))
@@ -36,7 +36,7 @@ def fuseContiguousIO(tracein):
       lr = tok
   out += ("%s %s %s %s %s\n" % (lr[0], lr[1], lr[2], lr[3], lr[4]))
   
-  print "finish - fuse contiguous IOs"
+  print("finish - fuse contiguous IOs")
   return out
   
 def removeRepeatedReads(tracein):
@@ -46,14 +46,14 @@ def removeRepeatedReads(tracein):
   has_been_read.setall(False)
   
   for line in tracein.splitlines():
-    tok = map(str.lstrip, line.split(" ")) #time,devno,blkno,blkcount,flag-0 write/1 read
+    tok = list(map(str.lstrip, line.split(" "))) #time,devno,blkno,blkcount,flag-0 write/1 read
     
     if (tok[4] == "0") or (0 in has_been_read[int(tok[2]):int(tok[2]) + int(tok[3])]):
       out += ("%s %s %s %s %s\n" % (tok[0], tok[1], tok[2], tok[3], tok[4]))
       if (tok[4] == "1"):
         has_been_read[int(tok[2]):int(tok[2]) + int(tok[3])] = int(tok[3]) * bitarray([True])
   
-  print "finish - remove repeated reads" 
+  print("finish - remove repeated reads") 
   return out
   
 def fitIOToDisk(tracein,disk_size): #by default 1TB
@@ -61,10 +61,10 @@ def fitIOToDisk(tracein,disk_size): #by default 1TB
     out = ""
     
     for line in tracein.splitlines():
-        tok = map(str.lstrip, line.split(" ")) #time,devno,blkno,blkcount,flag-0 write/1 read
+        tok = list(map(str.lstrip, line.split(" "))) #time,devno,blkno,blkcount,flag-0 write/1 read
         out += ("%s %s %s %s %s\n" % (tok[0], tok[1], str(int(tok[2]) % (disk_size // 512)), tok[3], tok[4]))
     
-    print "finish - fit all IOs to disk" 
+    print("finish - fit all IOs to disk") 
     return out
     
   

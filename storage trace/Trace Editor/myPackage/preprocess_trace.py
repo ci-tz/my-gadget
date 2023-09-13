@@ -26,7 +26,7 @@ def preprocessMSTrace(tracefile, filtertype):
         
     first_line = True
     for line in f:		
-      tok = map(str.lstrip, line.split(","))
+      tok = list(map(str.lstrip, line.split(",")))
       flags = -1
 
       if tok[0] == "DiskWrite":
@@ -76,7 +76,7 @@ def preprocessBReplayTrace(tracefile, filtertype):
         
     first_line = True
     for line in f:		
-      tok = map(str.strip, line.split(";"))
+      tok = list(map(str.strip, line.split(";")))
       flags = -1
 
       if tok[3] == "W":
@@ -122,7 +122,7 @@ def preprocessUnixBlkTraceUncombine(tracefile, filtertype):
   # skip header
         
     for line in f:
-      tok = map(str.strip, line.split())
+      tok = list(map(str.strip, line.split()))
       flags = -1
 
       if len(tok) > 6 and tok[5] == "D":
@@ -139,8 +139,8 @@ def preprocessUnixBlkTraceUncombine(tracefile, filtertype):
         t = {
           "time": (float(tok[3]) * 1000.0),
           "devno": 0,
-          "blkno": int(tok[7]) * 8,
-          "bcount": int(tok[9]) * 8,
+          "blkno": int(tok[7]),
+          "bcount": int(tok[9]),
           "flags": flags,
         };
 
@@ -166,7 +166,7 @@ def preprocessUnixBlkTrace(tracefile, filtertype):
         
     tmpline = []
     for line in f:
-      tok = map(str.strip, line.split())
+      tok = list(map(str.strip, line.split()))
       flags = -1
 
       if len(tok) > 6 and tok[5] == "Q":
@@ -183,8 +183,8 @@ def preprocessUnixBlkTrace(tracefile, filtertype):
         t = {
           "time": (float(tok[3]) * 1000.0),
           "devno": 0,
-          "blkno": int(tok[7]) * 8,
-          "bcount": int(tok[9]) * 8,
+          "blkno": int(tok[7]),
+          "bcount": int(tok[9]),
           "flags": flags,
         };
 

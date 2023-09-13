@@ -1,12 +1,14 @@
 #!/usr/bin/env python
 #title           :trace-editor.py
 #description     :process traces
-#author          :Vincentius Martin
-#date            :-
-#version         :0.1
+#author          :Vincentius Martin, Michael(Hao) Tong
+#date            :-, 20170124
+#version         :0.1, 0.2.1
 #usage           :see readme
 #notes           :
 #python_version  :2.7.5+
+#changelog.0.2.1 :split rerate and resize to rrerate, wrerate, rresize, wresize,
+#                 so that read and write are resized and rerated respectively
 #==============================================================================
 
 # import default
@@ -15,7 +17,8 @@ import argparse
 from os import listdir
 from subprocess import call
 
-sys.path.insert(0, './scripts/')
+sys.path.append('trace-edit/myPackage')
+
 
 import trace_modifier
 import preprocess_trace
@@ -61,8 +64,10 @@ if __name__ == '__main__':
   parser.add_argument("-largestAverage", help="largest average", action='store_true')
   parser.add_argument("-char", help="characteristic of a trace", action='store_true')
   parser.add_argument("-top", help="top n", type=int, default=1)
-  parser.add_argument("-resize", help="resize a trace", type=float, default=1.0)
-  parser.add_argument("-rerate", help="rerate a trace", type=float, default=1.0)
+  parser.add_argument("-rresize", help="resize read in a trace", type=float, default=1.0)
+  parser.add_argument("-wresize", help="resize write in a trace", type=float, default=1.0)
+  parser.add_argument("-rrerate", help="rerate read in a trace", type=float, default=1.0)
+  parser.add_argument("-wrerate", help="rerate write in a trace", type=float, default=1.0)
   parser.add_argument("-insert", help="insert a 'size' KB 'iotype' request every 'interval' ms", action='store_true')
   parser.add_argument("-ndisk", help="n disk for RAID", type=int, default=2)
   parser.add_argument("-stripe", help="RAID stripe unit size in byte", type=int, default=4096)
@@ -130,17 +135,20 @@ if __name__ == '__main__':
     else:
         for ftrace in listdir("in/" + args.dir):
             trace_sanitizer.sanitize(ftrace,args.maxsize)
-  elif (args.resize or args.rerate): #modify a trace
+  elif (args.rresize or args.wresize or args.rrerate or args.wrerate): #modify a trace
     with open("in/" + args.file) as f:
       for line in f:
         requestlist.append(line.rstrip().split(" "))
-    if args.resize != 1.0 or args.rerate!= 1.0 or args.insert:
-      if (args.resize != 1.0):
-        requestlist = trace_modifier.resize(requestlist,args.resize)     
-      if (args.rerate != 1.0):
-        requestlist = trace_modifier.modifyRate(requestlist,args.rerate) 
+    if args.rresize != 1.0 or args.wresize != 1.0 or args.rrerate != 1.0 or args.wrerate!= 1.0 or args.insert:
+      if (args.rresize != 1.0):
+        requestlist = trace_modifier.rresize(requestlist,args.rresize)
+      if (args.wresize != 1.0):
+        requestlist = trace_modifier.wresize(requestlist,args.wresize)
+      if (args.rrerate != 1.0):
+        requestlist = trace_modifier.modifyrRate(requestlist,args.rrerate)
+      if (args.wrerate != 1.0):
+        requestlist = trace_modifier.modifywRate(requestlist,args.wrerate)
       if args.insert:
-        requestlist = trace_modifier.insertIO(requestlist,args.size,args.interval,args.iotype) 
-      trace_modifier.printRequestList(requestlist, args.file)
+        requestlist = trace_modifier.insertIO(requestlist,args.size,args.interval,args.iotype)
+    trace_modifier.printRequestList(requestlist, args.file)
 
-  

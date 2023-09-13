@@ -17,14 +17,14 @@ def getLargestIO(tracefile):
 
   with open("in/" + tracefile) as f:
     for line in f:
-      tok = map(str.lstrip, line.split(" "))
+      tok = list(map(str.lstrip, line.split(" ")))
       
       if (int(tok[3])) > largest[1]:
         largest = [(float(tok[0]) / 60000),int(tok[3])]
       elif (int(tok[3])) == largest:
         largest[0].append(float(tok[0]) / 60000)
         
-  print "largest: " + str(largest[1]) + " in time " + str(largest[0])
+  print("largest: " + str(largest[1]) + " in time " + str(largest[0]))
 
 def getTopLargeIO(tracefile, offset, devno, minutes, tfilter, top = 1):
   timerange = int(minutes * 60000000) #micro sec 
@@ -33,7 +33,7 @@ def getTopLargeIO(tracefile, offset, devno, minutes, tfilter, top = 1):
   
   with open("in/" + tracefile) as f:
     for line in f:
-      tok = map(str.lstrip, line.split(" "))
+      tok = list(map(str.lstrip, line.split(" ")))
       
       if tok[4].strip() == "1" and tfilter.strip() == "write":
         continue
@@ -69,8 +69,8 @@ def getTopLargeIO(tracefile, offset, devno, minutes, tfilter, top = 1):
     sortidx = 0
     
   i = 0
-  for key, value in sorted(result.items(), key=lambda e: e[1][sortidx], reverse = True):
-    print str(key * minutes) + "-" + str(key * minutes + minutes) + ": " + str(value)
+  for key, value in sorted(list(result.items()), key=lambda e: e[1][sortidx], reverse = True):
+    print(str(key * minutes) + "-" + str(key * minutes + minutes) + ": " + str(value))
     i += 1
     if i == top:
       break

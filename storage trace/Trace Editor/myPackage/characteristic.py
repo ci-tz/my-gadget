@@ -166,7 +166,7 @@ def getTraceInfo(tracefile):
   outstr = ""
   basic_size_offset = """
 % Please add the following required packages to your document preamble:
-% \usepackage{{graphicx}}
+% \\usepackage{{graphicx}}
 \\begin{{table}}[]
 \centering
 \caption{{Characteristic of {}}}
@@ -251,7 +251,7 @@ same write                  & \multicolumn{{3}}{{l|}}{{{}}}                     
   writeSize.sort()
   readSize.sort()
   timeInterval.sort()
-  overwritten_blk_count = numpy.array(written_block.values())
+  overwritten_blk_count = numpy.array(list(written_block.values()))
   
   outstr += plot.format(str(writeSize[0]) + ", "+ str(writeSize[(writeCount-1)/4]) + ", " +str(writeSize[(writeCount-1)/2]) + ", "+str(writeSize[3*(writeCount-1)/4])+", "+str(writeSize[writeCount-1]),
 			str(readSize[0]) + ", "+ str(readSize[(readCount-1)/4]) + ", " +str(readSize[(readCount-1)/2]) + ", "+str(readSize[3*(readCount-1)/4])+", "+str(readSize[readCount-1]),		        

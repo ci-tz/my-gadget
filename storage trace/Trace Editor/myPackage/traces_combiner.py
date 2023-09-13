@@ -28,11 +28,11 @@ def combine(tracesdir):
   timeoffset = 0
 
   for tracefile in listoffiles:
-    print tracefile
+    print(tracefile)
     with open("in/" + tracesdir + "/" + tracefile) as f:
       timetmp = 0
       for line in (f):
-        tok = map(str.lstrip, line.split(" "))
+        tok = list(map(str.lstrip, line.split(" ")))
       
         t = {
           "time": float(tok[0]) + timeoffset,
