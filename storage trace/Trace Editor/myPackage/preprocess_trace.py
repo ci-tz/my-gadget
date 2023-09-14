@@ -27,6 +27,7 @@ def preprocessMSTrace(tracefile, filtertype):
                 break
 
         first_line = True
+        offset = 0
         for line in f:
             tok = list(map(str.lstrip, line.split(",")))
             flags = -1
