@@ -85,8 +85,7 @@ Timestamp,Response,IOType,LUN,Offset,Size
      > head 2016022219-LUN4.csv.gz  ← (Mon, 22 Feb 2016 19:00:00 JST)
        1456135200.013118000 ← (Mon, 22 Feb 2016 10:00:00 GMT)       
   - **Response** is the time needed to complete the I/O.
-  - **IOType** is "Read(R)", "Write(W)", or ""(blank).
-    The blank indicates that there was no response message.
+  - **IOType** is "Read(R)", "Write(W)", or ""(blank). The blank indicates that there was no response message.
   - **LUN** corresponds to each block storage device.(0,1,2,3,4, or 5).
   - **Offset** is the starting offset of the I/O in bytes from the start of the logical disk.
   - **Size** is the transfer size of the I/O request in bytes.
