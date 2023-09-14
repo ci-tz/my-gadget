@@ -29,6 +29,47 @@ The format is as follows:
   * BlkReplay's blktrace
   * Unix's blktrace
 
+**1.Microsoft Server Trace**
+
+[SNIA - Storage Networking Industry Association: IOTTA Repository Home](http://iotta.snia.org/traces/block-io/158)
+
+The head of the trace is the header, for example:
+
+    BeginHeader    
+              DiskRead,  TimeStamp,     Process Name ( PID),   ThreadID,             IrpPtr,   ByteOffset,     IOSize, ElapsedTime,  DiskNum, IrpFlags, DiskSvcTime, I/O Pri,  VolSnap,         FileObject, FileName
+              DiskWrite,  TimeStamp,     Process Name ( PID),   ThreadID,             IrpPtr,   ByteOffset,     IOSize, ElapsedTime,  DiskNum, IrpFlags, DiskSvcTime, I/O Pri,  VolSnap,         FileObject, FileName
+           DiskReadInit,  TimeStamp,     Process Name ( PID),   ThreadID,             IrpPtr
+          DiskWriteInit,  TimeStamp,     Process Name ( PID),   ThreadID,             IrpPtr
+              DiskFlush,  TimeStamp,     Process Name ( PID),   ThreadID,             IrpPtr,                           ElapsedTime,  DiskNum, IrpFlags, DiskSvcTime, I/O Pri
+          DiskFlushInit,  TimeStamp,     Process Name ( PID),   ThreadID,             IrpPtr
+    EndHeader
+
+The following is the trace, we only care about two kind of trace:
+
+```
+DiskRead, TimeStamp, Process Name ( PID), ThreadID, IrpPtr, ByteOffset, IOSize, ElapsedTime, DiskNum, IrpFlags, DiskSvcTime, I/O Pri, VolSnap, FileObject, FileName
+```
+
+```
+DiskWrite, TimeStamp, Process Name ( PID), ThreadID, IrpPtr, ByteOffset, IOSize, ElapsedTime,  DiskNum, IrpFlags, DiskSvcTime, I/O Pri,  VolSnap, FileObject, FileName
+```
+
+**2.Unix's blktrace format example**
+
+[SNIA - Storage Networking Industry Association: IOTTA Repository Home](http://iotta.snia.org/traces/block-io/28568)
+
+Each blocktrace record contains the following fields：
+
+[Device Major Number,Device Minor Number] [CPU Core ID] [Record ID] [Timestamp (in nanoseconds)] 
+
+[ProcessID] [Trace Action] [OperationType] [SectorNumber + I/O Size] [ProcessName]
+
+More details about each blocktrace field can be obtained here: https://linux.die.net/man/1/blkparse
+
+---
+
+Use example:
+
 ```shell
 python trace-editor.py -file <tracename> -preprocessMSTrace [-filter read/write]
 python trace-editor.py -file <tracename> -preprocessBlkReplayTrace [-filter read/write]
