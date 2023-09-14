@@ -16,9 +16,9 @@ import sys
 import argparse
 from os import listdir
 from subprocess import call
-
 sys.path.append('./myPackage')
 
+# import myPackage
 import trace_sanitizer
 import traces_merger
 import characteristic
@@ -30,8 +30,6 @@ import busy_load
 import traces_combiner
 import preprocess_trace
 import trace_modifier
-
-
 # end of import part
 
 # define global variables
@@ -44,13 +42,13 @@ if __name__ == '__main__':
     parser.add_argument("-dir", help="directory file to process", type=str)
 
     parser.add_argument(
-        "-produceTrace", help="produce preprocessed trace", action='store_true')
-    parser.add_argument(
         "-preprocessMSTrace", help="preprocess the MS trace into disksim ascii format", action='store_true')
     parser.add_argument("-preprocessBlkReplayTrace",
                         help="preprocess the blkreplay trace into disksim ascii format", action='store_true')
     parser.add_argument("-preprocessUnixBlkTrace",
                         help="preprocess the blkreplay trace into disksim ascii format", action='store_true')
+    parser.add_argument("-preprocessSystor17",
+                        help="preprocess the systor17 trace into disksim ascii format", action='store_true')
     parser.add_argument(
         "-breaktoraid", help="create a RAID-0 subtrace", action='store_true')
     parser.add_argument(
@@ -132,6 +130,13 @@ if __name__ == '__main__':
                     args.dir + "/" + ftrace, args.filter)
         else:
             preprocess_trace.preprocessUnixBlkTrace(args.file, args.filter)
+    elif (args.preprocessSystor17):  # preprocess
+        if (not args.file and args.dir):
+            for ftrace in listdir("in/" + args.dir):
+                preprocess_trace.preprocessSystor17(
+                    args.dir + "/" + ftrace, args.filter)
+        else:
+            preprocess_trace.preprocessSystor17(args.file, args.filter)
     elif (args.getLargestIO):
         toplargeio.getLargestIO(args.file)
     elif (args.breaktoraid):

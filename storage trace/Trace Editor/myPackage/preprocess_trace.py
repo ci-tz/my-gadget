@@ -39,7 +39,7 @@ def preprocessMSTrace(tracefile, filtertype):
 
             if flags == -1:
                 continue
-            if type_filter != -1 and type_filter != flags:
+            if type_filter != -1 and type_filter == flags:
                 continue
 
             if first_line:
@@ -92,7 +92,7 @@ def preprocessBReplayTrace(tracefile, filtertype):
 
             if flags == -1:
                 continue
-            if type_filter != -1 and type_filter != flags:
+            if type_filter != -1 and type_filter == flags:
                 continue
 
             if first_line:
@@ -113,7 +113,7 @@ def preprocessBReplayTrace(tracefile, filtertype):
     out.close()
 
 
-def preprocessUnixBlkTraceUncombine(tracefile, filtertype):
+def preprocessUnixBlkTrace(tracefile, filtertype):
 
     if (len(tracefile.split('/')) > 1):
         out = open("out/" + tracefile.split('/')
@@ -142,7 +142,7 @@ def preprocessUnixBlkTraceUncombine(tracefile, filtertype):
 
                 if flags == -1:
                     continue
-                if type_filter != -1 and type_filter != flags:
+                if type_filter != -1 and type_filter == flags:
                     continue
 
                 t = {
@@ -159,7 +159,7 @@ def preprocessUnixBlkTraceUncombine(tracefile, filtertype):
     out.close()
 
 
-def preprocessUnixBlkTrace(tracefile, filtertype):
+def preprocessUnixBlkTraceCombine(tracefile, filtertype):
 
     if (len(tracefile.split('/')) > 1):
         out = open("out/" + tracefile.split('/')
@@ -189,7 +189,7 @@ def preprocessUnixBlkTrace(tracefile, filtertype):
 
                 if flags == -1:
                     continue
-                if type_filter != -1 and type_filter != flags:
+                if type_filter != -1 and type_filter == flags:
                     continue
 
                 try:
@@ -219,4 +219,63 @@ def preprocessUnixBlkTrace(tracefile, filtertype):
         out.write("%s %d %d %d %d\n" %
                   (tmpline[0], tmpline[1], tmpline[2], tmpline[3], tmpline[4]))
 
+    out.close()
+
+# trace format is :
+#    0        1        2     3    4     5
+# Timestamp,Response,IOType,LUN,Offset,Size
+
+
+def preprocessSystor17(tracefile, filtertype):
+    if (len(tracefile.split('/')) > 1):
+        out = open("out/" + tracefile.split('/')
+                   [-1] + "-preprocess.trace", 'w')
+    else:
+        out = open("out/" + tracefile + "-preprocess.trace", 'w')
+
+    type_filter = -1
+    if filtertype == "write":
+        type_filter = 0
+    elif filtertype == "read":
+        type_filter = 1
+
+    sector_size = 512
+
+    with open("in/" + tracefile) as f:
+        first_line = True
+        offset = 0.0
+        last_time = 0.0  # check time order
+        for line in f:
+            tok = list(map(str.strip, line.split(',')))
+            flags = -1
+
+            if tok[2] == "W":
+                flags = 0
+            elif tok[2] == "R":
+                flags = 1
+
+            if flags == -1:
+                continue
+            if type_filter != -1 and type_filter == flags:
+                continue
+
+            if first_line:
+                offset = -float(tok[0]) * 1000.0  # original is in second
+                first_line = False
+            else:
+                if float(tok[0]) * 1000.0 + offset < last_time:
+                    print("time error: ", line)
+                    continue
+
+            last_time = float(tok[0]) * 1000.0 + offset
+
+            t = {
+                "time": (float(tok[0]) * 1000.0) + offset,
+                "devno": 0,
+                "blkno": int(tok[4]) / sector_size,
+                "bcount": (int(tok[5]) + sector_size - 1) / sector_size,
+                "flags": flags,
+            }
+            out.write("%s %d %d %d %d\n" % ("{0:.3f}".format(
+                t['time']), t['devno'], t['blkno'], t['bcount'], t['flags']))
     out.close()
