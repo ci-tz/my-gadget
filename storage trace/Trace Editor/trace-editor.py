@@ -121,10 +121,10 @@ if __name__ == '__main__':
     elif (args.preprocessBlkReplayTrace):  # preprocess
         if (not args.file and args.dir):
             for ftrace in listdir("in/" + args.dir):
-                preprocess_trace.preprocessBlkReplayTrace(
+                preprocess_trace.preprocessBReplayTrace(
                     args.dir + "/" + ftrace, args.filter)
         else:
-            preprocess_trace.preprocessBlkReplayTrace(args.file, args.filter)
+            preprocess_trace.preprocessBReplayTrace(args.file, args.filter)
     elif (args.preprocessUnixBlkTrace):  # preprocess
         if (not args.file and args.dir):
             for ftrace in listdir("in/" + args.dir):
