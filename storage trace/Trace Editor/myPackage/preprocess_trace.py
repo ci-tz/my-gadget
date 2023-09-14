@@ -192,13 +192,17 @@ def preprocessUnixBlkTrace(tracefile, filtertype):
                 if type_filter != -1 and type_filter != flags:
                     continue
 
-                t = {
-                    "time": (float(tok[3]) * 1000.0),
-                    "devno": 0,
-                    "blkno": int(tok[7]),
-                    "bcount": int(tok[9]),
-                    "flags": flags,
-                }
+                try:
+                    t = {
+                        "time": (float(tok[3]) * 1000.0),
+                        "devno": 0,
+                        "blkno": int(tok[7]),
+                        "bcount": int(tok[9]),
+                        "flags": flags,
+                    }
+                except ValueError:
+                    print("ValueError: ", line)
+                    continue
 
                 if not tmpline:  # firstline
                     # add a bcount column as memory
