@@ -60,8 +60,8 @@ def getTraceInfo(tracefile):
     write_countbucket = [0] * 7  # 32, 64, 128, 256, 512, 1024, 1024+
     read_countbucket = [0] * 7
 
-    write_sizebucket = [0] * 7
-    read_sizebucket = [0] * 7
+    write_sizebucket = [0.0] * 7
+    read_sizebucket = [0.0] * 7
 
     write_max_size = -1
     write_min_size = -1
@@ -161,6 +161,7 @@ def getTraceInfo(tracefile):
             starttrace_time = float(words[0])
         endtrace_time = float(words[0])
         # -----------------------------
+    assert(endtrace_time != None and starttrace_time != None)
     totalsec = float(endtrace_time-starttrace_time) / 1000
 
     outstr = ""
@@ -239,16 +240,16 @@ read size                  & \multicolumn{{2}}{{l|}}{{{}}}                      
     small_big = """
 \multicolumn{{4}}{{|c|}}{{\\textbf{{Small IO (\\textless= 32KB) v.s. Big IO(\\textgreater32KB)}}}}         \\\\ \\hline
 small rand writes                 & {}             & small rand writes/s           & {:.2f}           \\\\ \\hline
+rand writes                 & {}             & rand writes/s           & {:.2f}           \\\\ \\hline
 big writes                  & {}             & big writes/s                  & {:.2f}           \\\\ \\hline
 small writes                  & {}             & small writes/s                  & {:.2f}           \\\\ \\hline
 \multicolumn{{2}}{{|l|}}{{score(\#big/\#small)}}      & \multicolumn{{2}}{{l|}}{{{:.2f}}}                       \\\\ \\hline
 """
 
     outstr += small_big.format(small_random_writes, float(small_random_writes) / totalsec,
-                               sum(write_countbucket[1:len(
-                                   write_countbucket)]),
-                               float(
-                                   sum(write_countbucket[1:len(write_countbucket)])) / totalsec,
+                               randomWriteCount, float(randomWriteCount) / totalsec,
+                               sum(write_countbucket[1:len(write_countbucket)]),
+                               float(sum(write_countbucket[1:len(write_countbucket)])) / totalsec,
                                write_countbucket[0],
                                float(write_countbucket[0]) / totalsec,
                                float(sum(write_countbucket[1:len(write_countbucket)])) / write_countbucket[0] if write_countbucket[0] > 0 else 9999)

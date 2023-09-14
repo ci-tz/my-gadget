@@ -28,6 +28,7 @@ The format is as follows:
   * Microsoft Server Trace
   * BlkReplay's blktrace
   * Unix's blktrace
+  * Systor '17 Traces
 
 **1.Microsoft Server Trace**
 
@@ -65,6 +66,30 @@ Each blocktrace record contains the following fields：
 [ProcessID] [Trace Action] [OperationType] [SectorNumber + I/O Size] [ProcessName]
 
 More details about each blocktrace field can be obtained here: https://linux.die.net/man/1/blkparse
+
+
+**3.Systor '17 Traces**
+[SNIA - Storage Networking Industry Association: IOTTA Repository Home](http://iotta.snia.org/traces/block-io/4964)
+
+The files are gzipped csv (comma-separated text) files. The fields in
+the csv are:
+
+Timestamp,Response,IOType,LUN,Offset,Size
+
+  - **Timestamp** is the time the I/O was issued.
+    The timestamp is given as a Unix time (seconds since 1/1/1970) with a fractional part. 
+    Although the fractional part is nine digits, it is accurate only to the microsecond level; 
+    Please  ignore the nanosecond part.  
+    If you need to process the timestamps in their original local timezone, it is UTC+0900 (JST).
+    For example:
+     > head 2016022219-LUN4.csv.gz  ← (Mon, 22 Feb 2016 19:00:00 JST)
+       1456135200.013118000 ← (Mon, 22 Feb 2016 10:00:00 GMT)       
+  - **Response** is the time needed to complete the I/O.
+  - **IOType** is "Read(R)", "Write(W)", or ""(blank).
+    The blank indicates that there was no response message.
+  - **LUN** corresponds to each block storage device.(0,1,2,3,4, or 5).
+  - **Offset** is the starting offset of the I/O in bytes from the start of the logical disk.
+  - **Size** is the transfer size of the I/O request in bytes.
 
 ---
 
@@ -174,7 +199,7 @@ In this example:
 You can get something like whisker plot info about write size, read size, time density, and % write, % read, % random write
 
 ```shell
-python trace-editor.py -dir <dirname> -characteristic
+python trace-editor.py -dir <dirname> -char
 ```
 
 ### 11.Cut trace
